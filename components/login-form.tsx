@@ -3,7 +3,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -16,6 +15,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "./ui/label";
 import { Checkbox } from "./ui/checkbox";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { useToast } from "./ui/use-toast";
+import { EyeIcon } from "lucide-react";
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -23,6 +26,9 @@ const formSchema = z.object({
 });
 
 export default function LoginForm() {
+  const { toast } = useToast();
+  const router = useRouter();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -31,8 +37,20 @@ export default function LoginForm() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    const res = await signIn<"credentials">("credentials", {
+      ...values,
+      redirect: false,
+    });
+
+    if (res?.error) {
+      toast({
+        description: res.error,
+        variant: "destructive",
+      });
+    } else {
+      router.push("/");
+    }
   }
 
   return (
@@ -64,18 +82,27 @@ export default function LoginForm() {
                   <FormControl>
                     <Input {...field} type="password" />
                   </FormControl>
+                  {/* <Button variant="link" className="p-0">
+                    Esqueci minha senha
+                  </Button> */}
                 </FormItem>
               )}
             />
-            <div className="flex items-center space-x-2">
+            {/* <div className="flex items-center space-x-2">
               <Checkbox id="remember" />
               <Label htmlFor="remember">Lembrar das próximas vezes</Label>
-            </div>
+            </div> */}
             <Button type="submit" className="w-full">
               Entrar
             </Button>
           </form>
         </Form>
+        {/* <Button
+          onClick={() => signIn("google", { callbackUrl: "/" })}
+          className="w-full"
+        >
+          Google
+        </Button> */}
       </CardContent>
     </Card>
   );

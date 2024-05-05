@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import "../styles/globals.css";
 import { Roboto as FontSans } from "next/font/google";
+import { Toaster } from "@/components/ui/toaster";
 
 import { cn } from "@/lib/utils";
+import { AuthProvider } from "@/contexts/AuthContext";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -28,7 +30,8 @@ export default function RootLayout({
           fontSans.variable
         )}
       >
-        {children}
+        <AuthProvider>{children}</AuthProvider>
+        <Toaster />
       </body>
     </html>
   );

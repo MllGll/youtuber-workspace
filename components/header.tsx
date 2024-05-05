@@ -1,24 +1,25 @@
-"use client";
-
 import * as React from "react";
 import ChannelSwitcher from "./channel-switcher";
 import { UserNav } from "./user-nav";
-import Link from "next/link";
+import { getUser } from "@/services/session";
+import { redirect } from "next/navigation";
 
-export function SiteHeader() {
+export async function Header() {
+  const user = await getUser();
+
+  if (!user) redirect("/auth");
+
   return (
     <header>
       <div className="hidden flex-col md:flex">
         <div className="border-b">
           <div className="flex h-16 px-8">
             <div className="flex items-center space-x-4">
-              <Link href="/" className="text-xl font-semibold">
-                Youtuber Workspace
-              </Link>
+              <span className="text-xl font-semibold">Youtuber Workspace</span>
               <ChannelSwitcher />
             </div>
             <div className="ml-auto flex items-center ">
-              <UserNav />
+              <UserNav user={user} />
             </div>
           </div>
         </div>

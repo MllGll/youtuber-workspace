@@ -14,25 +14,47 @@ import {
 } from "@/components/ui/form";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { useToast } from "./ui/use-toast";
 
 const formSchema = z.object({
-  email: z.string().email(),
   name: z.string().min(1),
+  email: z.string().email(),
   password: z.string().min(1),
 });
 
 export default function RegisterForm() {
+  const { toast } = useToast();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: "",
       name: "",
+      email: "",
       password: "",
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    const request = await fetch("/api/users", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(values),
+    });
+
+    const response = await request.json();
+
+    if (request.ok) {
+      toast({
+        description: "Usuário cadastrado com sucesso.",
+      });
+    } else {
+      toast({
+        description: response.error,
+        variant: "destructive",
+      });
+    }
   }
 
   return (
@@ -45,24 +67,24 @@ export default function RegisterForm() {
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             <FormField
               control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email</FormLabel>
-                  <FormControl>
-                    <Input {...field} type="email" />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
               name="name"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Nome</FormLabel>
                   <FormControl>
                     <Input {...field} />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email</FormLabel>
+                  <FormControl>
+                    <Input {...field} type="email" />
                   </FormControl>
                 </FormItem>
               )}
