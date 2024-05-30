@@ -18,7 +18,7 @@ import { Checkbox } from "./ui/checkbox";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useToast } from "./ui/use-toast";
-import { EyeIcon } from "lucide-react";
+import { useState } from "react";
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -26,8 +26,11 @@ const formSchema = z.object({
 });
 
 export default function LoginForm() {
+  // adicionar recuperação de senha e continuar com google
   const { toast } = useToast();
   const router = useRouter();
+
+  const [showPassword, setShowPassword] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -80,7 +83,10 @@ export default function LoginForm() {
                 <FormItem>
                   <FormLabel>Senha</FormLabel>
                   <FormControl>
-                    <Input {...field} type="password" />
+                    <Input
+                      {...field}
+                      type={showPassword ? "text" : "password"}
+                    />
                   </FormControl>
                   {/* <Button variant="link" className="p-0">
                     Esqueci minha senha
@@ -88,10 +94,13 @@ export default function LoginForm() {
                 </FormItem>
               )}
             />
-            {/* <div className="flex items-center space-x-2">
-              <Checkbox id="remember" />
-              <Label htmlFor="remember">Lembrar das próximas vezes</Label>
-            </div> */}
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                id="showPassword"
+                onClick={() => setShowPassword(!showPassword)}
+              />
+              <Label htmlFor="showPassword">Mostrar senha</Label>
+            </div>
             <Button type="submit" className="w-full">
               Entrar
             </Button>

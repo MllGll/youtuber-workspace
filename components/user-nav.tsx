@@ -13,8 +13,11 @@ import {
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 import { getInitials } from "@/lib/utils";
+import { useRouter } from "next/navigation";
 
 export function UserNav({ user }: { user: any }) {
+  const router = useRouter();
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -36,8 +39,9 @@ export function UserNav({ user }: { user: any }) {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem>Conta</DropdownMenuItem>
-          <DropdownMenuItem>Configurações</DropdownMenuItem>
+          <DropdownMenuItem onClick={() => router.push("/settings")}>
+            Configurações
+          </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={() => signOut({ callbackUrl: "/auth" })}>

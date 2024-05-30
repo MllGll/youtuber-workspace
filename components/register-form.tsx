@@ -15,6 +15,9 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { useToast } from "./ui/use-toast";
+import { useState } from "react";
+import { Checkbox } from "./ui/checkbox";
+import { Label } from "./ui/label";
 
 const formSchema = z.object({
   name: z.string().min(1),
@@ -23,7 +26,11 @@ const formSchema = z.object({
 });
 
 export default function RegisterForm() {
+  // adicionar validação de email e continuar com google
+
   const { toast } = useToast();
+
+  const [showPassword, setShowPassword] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -70,7 +77,7 @@ export default function RegisterForm() {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Nome</FormLabel>
+                  <FormLabel>Nome de Usuário</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -96,11 +103,21 @@ export default function RegisterForm() {
                 <FormItem>
                   <FormLabel>Senha</FormLabel>
                   <FormControl>
-                    <Input {...field} type="password" />
+                    <Input
+                      {...field}
+                      type={showPassword ? "text" : "password"}
+                    />
                   </FormControl>
                 </FormItem>
               )}
             />
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                id="showPassword"
+                onClick={() => setShowPassword(!showPassword)}
+              />
+              <Label htmlFor="showPassword">Mostrar senha</Label>
+            </div>
             <Button type="submit" className="w-full">
               Criar conta
             </Button>

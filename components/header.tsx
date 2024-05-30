@@ -3,8 +3,9 @@ import ChannelSwitcher from "./channel-switcher";
 import { UserNav } from "./user-nav";
 import { getUser } from "@/services/session";
 import { redirect } from "next/navigation";
+import Link from "next/link";
 
-export async function Header() {
+export async function Header({ homePath }: { homePath?: boolean }) {
   const user = await getUser();
 
   if (!user) redirect("/auth");
@@ -15,8 +16,10 @@ export async function Header() {
         <div className="border-b">
           <div className="flex h-16 px-8">
             <div className="flex items-center space-x-4">
-              <span className="text-xl font-semibold">Youtuber Workspace</span>
-              <ChannelSwitcher />
+              <Link href="/" className="text-xl font-semibold">
+                Youtuber Workspace
+              </Link>
+              {homePath && <ChannelSwitcher />}
             </div>
             <div className="ml-auto flex items-center ">
               <UserNav user={user} />
