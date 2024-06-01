@@ -3,10 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "concurrently \"npm run dev-next\" \"npm run open\"",
+    "dev-next": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "open": "start http://localhost:3000"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.1.0",
@@ -52,6 +54,7 @@
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18",
     "autoprefixer": "^10.4.19",
+    "concurrently": "^8.2.2",
     "eslint": "^8",
     "eslint-config-next": "14.2.3",
     "html-loader": "^5.0.0",

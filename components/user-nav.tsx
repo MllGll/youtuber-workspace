@@ -23,7 +23,7 @@ export function UserNav({ user }: { user: any }) {
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="relative h-10 w-10 rounded-full">
           <Avatar className="h-10 w-10">
-            <AvatarImage src="/avatars/01.png" alt="@mllgll" />
+            <AvatarImage src="" alt="@mllgll" />
             <AvatarFallback>{getInitials(user?.name)}</AvatarFallback>
           </Avatar>
         </Button>
