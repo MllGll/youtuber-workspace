@@ -15,9 +15,9 @@ export async function Header({ homePath }: { homePath?: boolean }) {
       <div className="hidden flex-col md:flex">
         <div className="border-b">
           <div className="flex h-16 px-8">
-            <div className="flex items-center space-x-4">
-              <Link href="/" className="text-xl font-semibold">
-                Youtuber Workspace
+            <div className="flex items-center space-x-4 ">
+              <Link href="/" className="text-3xl font-league">
+                <span className="text-redYoutube">Youtuber</span> Workspace
               </Link>
               {homePath && <ChannelSwitcher />}
             </div>

@@ -1,16 +1,11 @@
 import type { Metadata } from "next";
 import "../styles/globals.css";
-import { Roboto as FontSans } from "next/font/google";
 import { Toaster } from "@/components/ui/toaster";
 
 import { cn } from "@/lib/utils";
 import { AuthProvider } from "@/contexts/AuthContext";
-
-const fontSans = FontSans({
-  subsets: ["latin"],
-  variable: "--font-sans",
-  weight: ["100", "300", "400", "500", "700", "900"],
-});
+import { ThemeProvider } from "@/providers/theme-provider";
+import { league, roboto } from "@/styles/fonts";
 
 export const metadata: Metadata = {
   title: "Youtuber Workspace",
@@ -23,15 +18,22 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={cn(
           "min-h-screen bg-background font-sans antialiased",
-          fontSans.variable
+          `${roboto.variable} ${league.variable}`
         )}
       >
-        <AuthProvider>{children}</AuthProvider>
-        <Toaster />
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <AuthProvider>{children}</AuthProvider>
+          <Toaster />
+        </ThemeProvider>
       </body>
     </html>
   );
